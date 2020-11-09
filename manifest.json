@@ -1,0 +1,45 @@
+{
+  "author": "Michael Kohler",
+  "description": "MyStrom Switch adapter for the WebThings Gateway",
+  "gateway_specific_settings": {
+    "webthings": {
+      "exec": "{nodeLoader} {path}",
+      "primary_type": "adapter",
+      "strict_max_version": "*",
+      "strict_min_version": "0.10.0"
+    }
+  },
+  "homepage_url": "https://github.com/MichaelKohler/mystrom-switch-adapter",
+  "id": "mystrom-switch-adapter",
+  "license": "MPL-2.0",
+  "manifest_version": 1,
+  "name": "MyStrom Switch Adapter",
+  "short_name": "MyStrom Switch",
+  "version": "1.0.0",
+  "options": {
+    "schema": {
+      "type": "object",
+      "required": [],
+      "properties": {
+        "devices": {
+          "type": "array",
+          "title": "A list of MyStrom Switch IPs",
+          "items": {
+            "type": "object",
+            "title": "IP",
+            "required": [
+              "ip"
+            ],
+            "properties": {
+              "ip": {
+                "type": "string",
+                "pattern": "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
+                "title": "The IP of the MyStrom Switch"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

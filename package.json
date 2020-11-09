@@ -1,0 +1,16 @@
+{
+  "name": "mystrom-switch-adapter",
+  "version": "1.0.0",
+  "description": "MyStrom Switch Adapter for WebThings Gateway",
+  "author": "Michael Kohler <me@michaelkohler.info>",
+  "main": "index.js",
+  "scripts": {
+    "build": "shasum --algorithm 256 manifest.json package.json *.js LICENSE README.md > SHA256SUMS"
+  },
+  "homepage": "https://github.com/MichaelKohler/mystrom-switch-adapter",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MichaelKohler/mystrom-switch-adapter.git"
+  }
+}
