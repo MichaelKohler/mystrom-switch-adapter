@@ -13,6 +13,7 @@ const DEVICE_NAME = 'MyStrom Switch';
 const REPORT_MAP = {
   on: 'relay',
   power: 'power',
+  temperature: 'temperature',
 };
 
 class SwitchProperty extends Property {
@@ -117,6 +118,24 @@ class MyStromSwitchAdapter extends Adapter {
       });
 
       this.handleDeviceAdded(device);
+
+      const temperatureDevice = new MyStromSwitchDevice(this, `mystrom-switch-temperature-${deviceConfig.ip}`, {
+        ip: deviceConfig.ip,
+        title: `${DEVICE_NAME} - Temperature - ${deviceConfig.ip}`,
+        '@type': ['TemperatureSensor'],
+        description: `${DEVICE_NAME} - Temperature - ${deviceConfig.ip}`,
+        properties: {
+          temperature: {
+            '@type': 'TemperatureProperty',
+            title: 'Temperature',
+            type: 'number',
+            value: -1,
+          },
+        },
+        pollIntervalMS,
+      });
+
+      this.handleDeviceAdded(temperatureDevice);
     }
   }
 
