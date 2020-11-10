@@ -31,7 +31,7 @@ class SwitchProperty extends Property {
 class MyStromSwitchDevice extends Device {
   constructor(adapter, id, deviceDescription) {
     super(adapter, id);
-    this.name = deviceDescription.name;
+    this.title = deviceDescription.title;
     this.type = deviceDescription.type;
     this['@type'] = deviceDescription['@type'];
     this.description = deviceDescription.description;
@@ -56,14 +56,13 @@ class MyStromSwitchAdapter extends Adapter {
 
     for (const deviceConfig of devices) {
       const device = new MyStromSwitchDevice(this, 'mystrom-switch', {
-        name: `MyStrom Switch - ${deviceConfig.ip}`,
+        title: `MyStrom Switch - ${deviceConfig.ip}`,
         '@type': ['OnOffSwitch', 'SmartPlug'],
         description: `MyStrom Switch - ${deviceConfig.ip}`,
         properties: {
           on: {
             '@type': 'OnOffProperty',
-            label: 'On/Off',
-            name: 'on',
+            title: 'On/Off',
             type: 'boolean',
             value: false,
           },
