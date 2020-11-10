@@ -6,8 +6,9 @@ const {
   Property,
 } = require('gateway-addon');
 
-const manifest = require('./manifest.json');
 const config = require('./config');
+
+const DEVICE_NAME = 'MyStrom Switch';
 
 class SwitchProperty extends Property {
   constructor(device, name, propertyDescription) {
@@ -55,10 +56,12 @@ class MyStromSwitchAdapter extends Adapter {
     const { devices = []} = await config.load(manifest);
 
     for (const deviceConfig of devices) {
-      const device = new MyStromSwitchDevice(this, 'mystrom-switch', {
-        title: `MyStrom Switch - ${deviceConfig.ip}`,
+      // Note: the IP is part of the name as it needs to be unique. MAC would be better, but it
+      // doesn't seem to be possible to get the MAC from the MyStrom device.
+      const device = new MyStromSwitchDevice(this, `mystrom-switch-${deviceConfig.ip}`, {
+        title: `${DEVICE_NAME} - ${deviceConfig.ip}`,
         '@type': ['OnOffSwitch', 'SmartPlug'],
-        description: `MyStrom Switch - ${deviceConfig.ip}`,
+        description: `${DEVICE_NAME} - ${deviceConfig.ip}`,
         properties: {
           on: {
             '@type': 'OnOffProperty',
