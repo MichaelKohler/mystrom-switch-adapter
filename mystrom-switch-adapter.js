@@ -22,7 +22,7 @@ class SwitchProperty extends Property {
     switch (this.name) {
       case 'on': {
         await this.device.adapter.sendValue(
-          this.device.description,
+          this.device.ip,
           value
         );
         break;
@@ -39,6 +39,7 @@ class SwitchProperty extends Property {
 class MyStromSwitchDevice extends Device {
   constructor(adapter, id, deviceDescription) {
     super(adapter, id);
+    this.ip = deviceDescription.ip;
     this.title = deviceDescription.title;
     this.type = deviceDescription.type;
     this['@type'] = deviceDescription['@type'];
@@ -63,9 +64,8 @@ class MyStromSwitchAdapter extends Adapter {
     const { devices = []} = await config.load(manifest);
 
     for (const deviceConfig of devices) {
-      // Note: the IP is part of the name as it needs to be unique. MAC would be better, but it
-      // doesn't seem to be possible to get the MAC from the MyStrom device.
       const device = new MyStromSwitchDevice(this, `mystrom-switch-${deviceConfig.ip}`, {
+        ip: deviceConfig.ip,
         title: `${DEVICE_NAME} - ${deviceConfig.ip}`,
         '@type': ['OnOffSwitch', 'SmartPlug'],
         description: `${DEVICE_NAME} - ${deviceConfig.ip}`,
@@ -83,9 +83,7 @@ class MyStromSwitchAdapter extends Adapter {
     }
   }
 
-  async sendValue(deviceDescription, state) {
-    // TODO: would it be allowed to set the IP as property on the device itself when creating it?
-    const deviceIp = deviceDescription.replace(`${DEVICE_NAME} - `, '');
+  async sendValue(deviceIp, state) {
     const booleanState = state ? 1 : 0;
     const uri =
       `http://${deviceIp}/relay?state=${booleanState}`;
