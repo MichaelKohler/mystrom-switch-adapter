@@ -44,7 +44,6 @@ class SwitchProperty extends Property {
   }
 
   async updateProperty() {
-    // TODO: only update if device actually added?
     const uri = `http://${this.device.ip}/report`;
 
     try {
@@ -54,7 +53,6 @@ class SwitchProperty extends Property {
       const resultProperty = REPORT_MAP[this.name];
       const reportedValue = data[resultProperty];
 
-      // TODO: only set if difference above given threshold?
       if (reportedValue !== this.value) {
         this.setCachedValueAndNotify(reportedValue);
       }
