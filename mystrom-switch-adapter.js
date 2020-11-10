@@ -10,6 +10,10 @@ const fetch = require('node-fetch');
 const config = require('./config');
 
 const DEVICE_NAME = 'MyStrom Switch';
+const REPORT_MAP = {
+  on: 'relay',
+  power: 'power',
+};
 
 class SwitchProperty extends Property {
   constructor(device, name, propertyDescription, pollIntervalMS) {
@@ -33,7 +37,8 @@ class SwitchProperty extends Property {
         break;
     }
 
-    this.setCachedValue(value);
+    this.setCachedValueAndNotify(value);
+    setTimeout(() => this.updateProperty(), 2000);
     return this.value;
   }
 
@@ -43,10 +48,14 @@ class SwitchProperty extends Property {
 
     try {
       const response = await fetch(uri);
-      const { relay } = await response.json();
+      const data = await response.json();
 
-      if (relay !== this.value) {
-        this.setCachedValueAndNotify(relay);
+      const resultProperty = REPORT_MAP[this.name];
+      const reportedValue = data[resultProperty];
+
+      // TODO: only set if difference above given threshold?
+      if (reportedValue !== this.value) {
+        this.setCachedValueAndNotify(reportedValue);
       }
     } catch (error) {
       console.error(error);
@@ -96,6 +105,12 @@ class MyStromSwitchAdapter extends Adapter {
             title: 'On/Off',
             type: 'boolean',
             value: false,
+          },
+          power: {
+            '@type': 'InstantaneousPowerProperty',
+            title: 'Power',
+            type: 'number',
+            value: 0,
           },
         },
         pollIntervalMS,
