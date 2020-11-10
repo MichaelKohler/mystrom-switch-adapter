@@ -127,6 +127,7 @@ class MyStromSwitchAdapter extends Adapter {
             '@type': 'TemperatureProperty',
             title: 'Temperature',
             type: 'number',
+            unit: 'degree celsius',
             value: -1,
           },
         },
