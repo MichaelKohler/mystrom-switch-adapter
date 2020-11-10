@@ -38,6 +38,10 @@
               }
             }
           }
+        },
+        "pollIntervalMS": {
+          "type": "integer",
+          "title": "Polling Interval in milliseconds"
         }
       }
     }

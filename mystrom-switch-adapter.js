@@ -12,10 +12,12 @@ const config = require('./config');
 const DEVICE_NAME = 'MyStrom Switch';
 
 class SwitchProperty extends Property {
-  constructor(device, name, propertyDescription) {
+  constructor(device, name, propertyDescription, pollIntervalMS) {
     super(device, name, propertyDescription);
     this.setCachedValue(propertyDescription.value);
     this.device.notifyPropertyChanged(this);
+    setInterval(() => this.updateProperty(), pollIntervalMS);
+    this.updateProperty();
   }
 
   async setValue(value) {
@@ -31,8 +33,24 @@ class SwitchProperty extends Property {
         break;
     }
 
-    this.setCachedValueAndNotify(value);
+    this.setCachedValue(value);
     return this.value;
+  }
+
+  async updateProperty() {
+    // TODO: only update if device actually added?
+    const uri = `http://${this.device.ip}/report`;
+
+    try {
+      const response = await fetch(uri);
+      const { relay } = await response.json();
+
+      if (relay !== this.value) {
+        this.setCachedValueAndNotify(relay);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 
@@ -46,7 +64,7 @@ class MyStromSwitchDevice extends Device {
     this.description = deviceDescription.description;
     for (const propertyName in deviceDescription.properties) {
       const propertyDescription = deviceDescription.properties[propertyName];
-      const property = new SwitchProperty(this, propertyName, propertyDescription);
+      const property = new SwitchProperty(this, propertyName, propertyDescription, deviceDescription.pollIntervalMS);
       this.properties.set(propertyName, property);
     }
   }
@@ -61,7 +79,10 @@ class MyStromSwitchAdapter extends Adapter {
   }
 
   async createSwitches(manifest) {
-    const { devices = []} = await config.load(manifest);
+    const {
+      devices = [],
+      pollIntervalMS = 15 * 1000,
+    } = await config.load(manifest);
 
     for (const deviceConfig of devices) {
       const device = new MyStromSwitchDevice(this, `mystrom-switch-${deviceConfig.ip}`, {
@@ -77,6 +98,7 @@ class MyStromSwitchAdapter extends Adapter {
             value: false,
           },
         },
+        pollIntervalMS,
       });
 
       this.handleDeviceAdded(device);
@@ -85,8 +107,7 @@ class MyStromSwitchAdapter extends Adapter {
 
   async sendValue(deviceIp, state) {
     const booleanState = state ? 1 : 0;
-    const uri =
-      `http://${deviceIp}/relay?state=${booleanState}`;
+    const uri = `http://${deviceIp}/relay?state=${booleanState}`;
 
     try {
       await fetch(uri);
