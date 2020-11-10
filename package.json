@@ -5,12 +5,15 @@
   "author": "Michael Kohler <me@michaelkohler.info>",
   "main": "index.js",
   "scripts": {
-    "build": "shasum --algorithm 256 manifest.json package.json *.js LICENSE README.md > SHA256SUMS"
+    "build": "shasum --algorithm 256 manifest.json package.json *.js LICENSE README.md > SHA256SUMS && find node_modules \\( -type f -o -type l \\) -exec shasum --algorithm 256 {} \\; >> SHA256SUMS"
   },
   "homepage": "https://github.com/MichaelKohler/mystrom-switch-adapter",
   "license": "MPL-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/MichaelKohler/mystrom-switch-adapter.git"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.1"
   }
 }

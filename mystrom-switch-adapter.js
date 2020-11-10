@@ -5,6 +5,7 @@ const {
   Device,
   Property,
 } = require('gateway-addon');
+const fetch = require('node-fetch');
 
 const config = require('./config');
 
@@ -17,15 +18,21 @@ class SwitchProperty extends Property {
     this.device.notifyPropertyChanged(this);
   }
 
-  setValue(value) {
-    return new Promise((resolve, reject) => {
-      super.setValue(value).then((updatedValue) => {
-        resolve(updatedValue);
-        this.device.notifyPropertyChanged(this);
-      }).catch((err) => {
-        reject(err);
-      });
-    });
+  async setValue(value) {
+    switch (this.name) {
+      case 'on': {
+        await this.device.adapter.sendValue(
+          this.device.description,
+          value
+        );
+        break;
+      }
+      default:
+        break;
+    }
+
+    this.setCachedValueAndNotify(value);
+    return this.value;
   }
 }
 
@@ -73,6 +80,20 @@ class MyStromSwitchAdapter extends Adapter {
       });
 
       this.handleDeviceAdded(device);
+    }
+  }
+
+  async sendValue(deviceDescription, state) {
+    // TODO: would it be allowed to set the IP as property on the device itself when creating it?
+    const deviceIp = deviceDescription.replace(`${DEVICE_NAME} - `, '');
+    const booleanState = state ? 1 : 0;
+    const uri =
+      `http://${deviceIp}/relay?state=${booleanState}`;
+
+    try {
+      await fetch(uri);
+    } catch (error) {
+      console.error(error);
     }
   }
 }
