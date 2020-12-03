@@ -80,7 +80,7 @@ class MyStromSwitchDevice extends Device {
 
 class MyStromSwitchAdapter extends Adapter {
   constructor(addonManager, manifest) {
-    super(addonManager, 'MyStromSwitchAdapter', manifest.id);
+    super(addonManager, 'MyStromSwitchAdapter', manifest.name);
     addonManager.addAdapter(this);
 
     this.createSwitches(manifest);
