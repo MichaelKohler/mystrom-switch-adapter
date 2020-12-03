@@ -1,6 +1,6 @@
 {
   "name": "mystrom-switch-adapter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MyStrom Switch Adapter for WebThings Gateway",
   "author": "Michael Kohler <me@michaelkohler.info>",
   "main": "index.js",
