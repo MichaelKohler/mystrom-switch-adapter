@@ -13,9 +13,9 @@
   "id": "mystrom-switch-adapter",
   "license": "MPL-2.0",
   "manifest_version": 1,
-  "name": "MyStrom Switch Adapter",
-  "short_name": "MyStrom Switch",
-  "version": "1.0.3",
+  "name": "MyStrom Switch",
+  "short_name": "MyStrom Plug",
+  "version": "1.0.4",
   "options": {
     "schema": {
       "type": "object",
