@@ -8,6 +8,7 @@ const {
 const fetch = require('node-fetch');
 
 const config = require('./config');
+const manifest = require('./manifest.json');
 
 const DEVICE_NAME = 'MyStrom Switch';
 const REPORT_MAP = {
@@ -79,18 +80,18 @@ class MyStromSwitchDevice extends Device {
 }
 
 class MyStromSwitchAdapter extends Adapter {
-  constructor(addonManager, manifest) {
-    super(addonManager, 'MyStromSwitchAdapter', manifest.name);
+  constructor(addonManager) {
+    super(addonManager, 'MyStromSwitchAdapter', manifest.id);
     addonManager.addAdapter(this);
 
-    this.createSwitches(manifest);
+    this.createSwitches(manifest.id);
   }
 
-  async createSwitches(manifest) {
+  async createSwitches(manifestId) {
     const {
       devices = [],
       pollIntervalMS = 15 * 1000,
-    } = await config.load(manifest);
+    } = await config.load(manifestId);
 
     for (const deviceConfig of devices) {
       const device = new MyStromSwitchDevice(this, `mystrom-switch-${deviceConfig.ip}`, {
