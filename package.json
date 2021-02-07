@@ -15,5 +15,13 @@
   },
   "dependencies": {
     "node-fetch": "^2.6.1"
-  }
+  },
+  "files": [
+    "index.js",
+    "config.js",
+    "manifest.json",
+    "package.json",
+    "mystrom-switch-adapter.js",
+    "SHA256SUMS"
+  ]
 }
