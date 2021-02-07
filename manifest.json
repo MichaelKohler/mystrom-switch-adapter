@@ -15,7 +15,7 @@
   "manifest_version": 1,
   "name": "MyStrom Switch Adapter",
   "short_name": "MyStrom Switch",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "options": {
     "schema": {
       "type": "object",
