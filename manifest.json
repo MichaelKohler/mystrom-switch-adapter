@@ -15,7 +15,7 @@
   "manifest_version": 1,
   "name": "MyStrom Switch",
   "short_name": "MyStrom Plug",
-  "version": "1.0.4",
+  "version": "1.0.7",
   "options": {
     "schema": {
       "type": "object",
